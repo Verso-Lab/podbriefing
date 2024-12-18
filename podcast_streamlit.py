@@ -45,7 +45,7 @@ def generate_newsletter(analyses, feeds):
     """Generate a punchy newsletter from podcast analyses"""
     today = datetime.now().strftime("%B %d")
     
-    newsletter = f"""# Podcast Briefiong
+    newsletter = f"""# Podcast Briefing
 #### {today}
 
 *Quick update on today's episodes:*
@@ -179,7 +179,7 @@ def main():
         </style>
     """, unsafe_allow_html=True)
 
-    st.title("🎧 Podcast Briefing Generator")
+    st.title("🎧 Podletter Generator")
     
     # Header section
     st.markdown("Pick your podcasts. We'll analyze the latest episodes and create your briefing.")
