@@ -1,11 +1,11 @@
 import os
-from dotenv import load_dotenv
 import google.generativeai as genai
 from pathlib import Path
 from pydub import AudioSegment
 import tempfile
 import logging
 import time
+import streamlit as st
 
 # Configure logging
 logging.basicConfig(
@@ -18,14 +18,12 @@ logger = logging.getLogger(__name__)
 class PodcastAnalyzer:
     def __init__(self):
         logger.info("Initializing PodcastAnalyzer")
-        # Load environment variables
-        load_dotenv()
         
-        # Configure Gemini
-        api_key = os.getenv("GEMINI_API_KEY")
+        # Configure Gemini using Streamlit secrets
+        api_key = st.secrets["GEMINI_API_KEY"]
         if not api_key:
-            logger.error("GEMINI_API_KEY not found in environment variables")
-            raise ValueError("GEMINI_API_KEY not found in environment variables")
+            logger.error("GEMINI_API_KEY not found in Streamlit secrets")
+            raise ValueError("GEMINI_API_KEY not found in Streamlit secrets")
             
         genai.configure(api_key=api_key)
         logger.info("Gemini API configured successfully")
@@ -36,7 +34,6 @@ class PodcastAnalyzer:
             "top_p": 0.95,
             "top_k": 40,
             "max_output_tokens": 8192,
-            "response_mime_type": "text/plain",
         }
         
         self.model = genai.GenerativeModel(
