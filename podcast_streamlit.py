@@ -195,11 +195,11 @@ def main():
         with podcast_cols[idx % 3]:
             # Container for the entire card
             with st.container():
-                # Image container
+                # Get and display podcast image
                 feed = get_feed_data(rss_url)
                 image_url = get_podcast_image(feed)
                 if image_url:
-                    st.image(image_url, use_container_width=True)
+                    st.image(image_url, width="100%")
                 
                 # Title
                 st.markdown(f"#### {podcast_name}")
