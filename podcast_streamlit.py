@@ -199,7 +199,7 @@ def main():
                 feed = get_feed_data(rss_url)
                 image_url = get_podcast_image(feed)
                 if image_url:
-                    st.image(image_url, width="100%")
+                    st.image(image_url, use_container_width=True)
                 
                 # Title
                 st.markdown(f"#### {podcast_name}")
