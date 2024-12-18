@@ -150,14 +150,14 @@ def download_and_analyze_episode(rss_url, output_dir='downloads'):
                         
                         st.success(f"Downloaded: {os.path.basename(filename)}")
                 
-                # Analyze the episode
+                # Get detailed analysis
                 with st.spinner('Analyzing podcast content...'):
                     analyzer = PodcastAnalyzer()
-                    analysis = analyzer.analyze_audio(filename, ANALYSIS_PROMPT)
-                    if analysis.startswith("Error"):
-                        st.error(analysis)
+                    detailed_analysis = analyzer.analyze_audio_detailed(filename)
+                    if detailed_analysis.startswith("Error"):
+                        st.error(detailed_analysis)
                         return None
-                    return analysis
+                    return detailed_analysis
                 
     except Exception as e:
         st.error(f"Error: {str(e)}")
@@ -231,37 +231,46 @@ def main():
         st.write("")
         
         # Create a progress section
-        st.write("### 🎯 Generating Your Briefing")
+        st.write("### 🎯 Analyzing Episodes")
         progress_bar = st.progress(0)
         status_text = st.empty()
         
         # Collect all analyses
-        analyses = {}
+        detailed_analyses = {}
         total_selected = sum(selected_podcasts.values())
         current = 0
         
+        # First pass: Get detailed analysis for each podcast
         for podcast_name, is_selected in selected_podcasts.items():
             if is_selected:
                 current += 1
                 progress = current / total_selected
                 progress_bar.progress(progress)
-                status_text.write(f"Processing: {podcast_name} ({current}/{total_selected})")
+                status_text.write(f"Analyzing: {podcast_name} ({current}/{total_selected})")
                 
                 analysis = download_and_analyze_episode(PODCAST_FEEDS[podcast_name])
                 if analysis:
-                    analyses[podcast_name] = analysis
+                    detailed_analyses[podcast_name] = analysis
         
         # Clear progress indicators
         progress_bar.empty()
         status_text.empty()
         
-        if analyses:
-            # Generate and display newsletter
+        if detailed_analyses:
+            # Second pass: Generate cohesive newsletter
+            st.write("### 📝 Generating Newsletter")
+            with st.spinner('Crafting your briefing...'):
+                analyzer = PodcastAnalyzer()
+                newsletter = analyzer.generate_cohesive_newsletter(detailed_analyses)
+            
+            if newsletter.startswith("Error"):
+                st.error("Failed to generate newsletter. Please try again.")
+                return
+            
+            # Display the newsletter
             st.write("### 📬 Your Podcast Briefing")
             
-            # Add download button for the newsletter
-            newsletter = generate_newsletter(analyses, PODCAST_FEEDS)
-            
+            # Add download button
             col1, col2 = st.columns([6, 1])
             with col2:
                 st.download_button(
@@ -272,7 +281,7 @@ def main():
                     use_container_width=True
                 )
             
-            # Display the newsletter in a container with a subtle background
+            # Display in container
             with st.container():
                 st.markdown("""
                 <style>
@@ -289,7 +298,7 @@ def main():
                 st.markdown(newsletter)
                 st.markdown('</div>', unsafe_allow_html=True)
         else:
-            st.error("❌ Failed to generate briefing. Please try again.")
+            st.error("❌ Failed to analyze episodes. Please try again.")
 
 if __name__ == "__main__":
     main() 
