@@ -283,6 +283,16 @@ files = [
 sgmllib3k = "*"
 
 [[package]]
+name = "ffmpeg"
+version = "1.4"
+description = "ffmpeg python package url [https://github.com/jiashaokun/ffmpeg]"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ffmpeg-1.4.tar.gz", hash = "sha256:6931692c890ff21d39938433c2189747815dca0c60ddc7f9bb97f199dba0b5b9"},
+]
+
+[[package]]
 name = "gitdb"
 version = "4.0.11"
 description = "Git Object Database"
@@ -1733,4 +1743,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.13"
-content-hash = "aee4a7c15cf176f9158d97224c8971d3156146ce273e413e4e3cc237d3f880ba"
+content-hash = "e9b1778ae647a06c90dd94b4c51d2d4ee0b55b223d2972268b990ce0e960d6f0"
