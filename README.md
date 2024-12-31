@@ -1,6 +1,29 @@
 # PodBriefing Backend
 
-Backend service for analyzing podcasts using Gemini AI and generating briefings.
+Backend service for analyzing podcasts using Gemini AI and generating briefings. Uses PostgreSQL to store podcast episodes and their analyses, and Redis for managing background processing tasks.
+
+## Database Models
+
+The application uses two main models:
+
+### Episode
+Stores information about podcast episodes:
+- `id`: Unique identifier
+- `rss_url`: Source RSS feed URL
+- `podcast_name`: Name of the podcast
+- `episode_title`: Title of the episode
+- `audio_path`: Local path to downloaded audio file
+- `status`: Processing status (pending, downloading, analyzing, completed, failed)
+- `created_at`: When the episode was added
+- `updated_at`: Last update timestamp
+
+### Analysis
+Stores AI-generated analyses for episodes:
+- `id`: Unique identifier
+- `episode_id`: Reference to the Episode
+- `analysis_type`: Type of analysis (brief or lead)
+- `result_text`: The generated analysis text
+- `created_at`: When the analysis was created
 
 ## Requirements
 
@@ -21,7 +44,6 @@ poetry install
 
 ### 2. Set up PostgreSQL
 
-#### For macOS:
 1. Install PostgreSQL 17 using Homebrew:
    ```bash
    brew install postgresql@17
@@ -66,6 +88,15 @@ poetry run alembic revision --autogenerate -m "initial"
 poetry run alembic upgrade head
 ```
 
+When you make changes to the database models in `src/db/models.py`, you'll need to create and apply a new migration:
+```bash
+# Create a new migration after model changes
+poetry run alembic revision --autogenerate -m "describe_your_changes"
+
+# Apply the new migration
+poetry run alembic upgrade head
+```
+
 ### 5. Start the Application
 
 1. Start the development server:
@@ -96,14 +127,10 @@ If you encounter database connection errors:
 
 1. Verify PostgreSQL is running:
    ```bash
-   # macOS
    brew services list | grep postgresql
-   
-   # Ubuntu
-   sudo service postgresql status
    ```
 
-2. Check if the postgres user exists (macOS only):
+2. Check if the postgres user exists:
    ```bash
    # Create the user if it doesn't exist
    createuser-17 -s postgres
@@ -111,11 +138,7 @@ If you encounter database connection errors:
 
 3. Test database connection:
    ```bash
-   # macOS
    psql-17 -U postgres -d podbriefing
-   
-   # Ubuntu
-   sudo -u postgres psql -d podbriefing
    ```
 
 4. Common error messages:
@@ -127,9 +150,5 @@ If you encounter database connection errors:
 
 Make sure Redis is running:
 ```bash
-# macOS
 brew services list | grep redis
-
-# Ubuntu
-sudo service redis status
 ```
