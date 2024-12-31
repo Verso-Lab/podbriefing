@@ -1,16 +1,22 @@
 [tool.poetry]
+name = "podletter-backend"
+version = "0.1.0"
+description = "Backend for podcast analysis service"
 package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.13"
-streamlit = "^1.41.1"
 google-generativeai = "^0.8.3"
 feedparser = "^6.0.11"
 requests = "^2.32.3"
 pydub = "^0.25.1"
-narwhals = "^1.18.4"
-audioop-lts = "^0.2.1"
-ffmpeg = "^1.4"
+fastapi = "^0.115.6"
+uvicorn = "^0.34.0"
+celery = "^5.4.0"
+redis = "^5.2.1"
+psycopg2-binary = "^2.9.10"
+sqlalchemy = "^2.0.36"
+python-multipart = "^0.0.20"
 
 
 [build-system]

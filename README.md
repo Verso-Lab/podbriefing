@@ -1,35 +1,44 @@
-# Podcast Newsletter Generator
+# PodBriefing Backend
 
-A Streamlit app that analyzes podcasts and generates sharp, insider-style briefings.
+Backend service for analyzing podcasts using Gemini AI and generating briefings.
 
 ## Setup
 
-1. Clone this repository
-2. Install dependencies:
+1. Install dependencies:
 ```bash
-pip install -r requirements.txt
+poetry install
 ```
 
-3. Create a `.env` file in the root directory with your Gemini API key:
-```
-GEMINI_API_KEY=your_api_key_here
-```
-
-4. Install ffmpeg (required for audio processing):
-- Mac: `brew install ffmpeg`
-- Ubuntu: `sudo apt-get install ffmpeg`
-- Windows: Download from https://ffmpeg.org/download.html
-
-## Running Locally
-
+2. Set up environment variables:
 ```bash
-streamlit run podcast_streamlit.py
+# Create .env file
+cp .env.example .env
+# Add your Gemini API key
 ```
 
-## Deploying to Streamlit Cloud
+3. Run development server:
+```bash
+poetry run uvicorn src.main:app --reload
+```
 
-1. Push your code to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io)
-3. Deploy from your GitHub repository
-4. Add your `GEMINI_API_KEY` in the Streamlit Cloud secrets management
-5. Deploy! 
+4. Run Celery worker:
+```bash
+poetry run celery -A src.tasks.celery_app worker --loglevel=info
+```
+
+## Project Structure
+
+```
+src/
+├── api/          # FastAPI routes
+├── core/         # Core business logic
+├── db/           # Database models and config
+└── tasks/        # Celery tasks
+```
+
+## Requirements
+
+- Python 3.11+
+- Redis (for Celery)
+- PostgreSQL
+- FFmpeg (for audio processing) 
