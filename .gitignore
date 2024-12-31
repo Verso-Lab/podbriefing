@@ -1,10 +1,3 @@
-# Environment variables
-.env
-
-# Downloaded podcasts
-downloads/
-*.mp3
-
 # Python
 __pycache__/
 *.py[cod]
@@ -15,11 +8,21 @@ env/
 build/
 develop-eggs/
 dist/
+downloads/
 eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
 *.egg-info/
+.installed.cfg
 *.egg
 
 # Virtual Environment
+.env
+.venv
 venv/
 ENV/
 
@@ -29,9 +32,18 @@ ENV/
 *.swp
 *.swo
 
-# OS
-.DS_Store
-Thumbs.db
+# Project specific
+downloads/
+*.mp3
+*.wav
+*.m4a
+.env.local
 
-# Streamlit
-.streamlit/secrets.toml
+# Logs
+*.log
+logs/
+
+# Cache
+.pytest_cache/
+.coverage
+htmlcov/
